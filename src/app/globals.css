@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #f5f0e8;
+  --bg-secondary: #fffdf7;
+  --text-primary: #0a0a0a;
+  --text-secondary: #3d3d3d;
+  --accent-primary: #ff3b00;
+  --accent-secondary: #0057ff;
+  --accent-tertiary: #00c896;
+  --border: #0a0a0a;
+  --shadow: #0a0a0a;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-primary text-text-primary font-body antialiased;
+    cursor: none;
+  }
+
+  @media (pointer: coarse), (max-width: 768px) {
+    body {
+      cursor: auto;
+    }
+  }
+
+  ::selection {
+    background-color: var(--accent-primary);
+    color: var(--bg-secondary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .brutal-card {
+    @apply border-2 border-border bg-bg-secondary shadow-brutal transition-all duration-200;
+  }
+
+  .brutal-card:hover {
+    @apply -translate-x-1 -translate-y-1 shadow-brutal-hover;
+  }
+
+  .brutal-btn {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-border bg-bg-secondary px-6 py-3 font-ui text-sm font-semibold uppercase tracking-wide shadow-brutal transition-all duration-150;
+  }
+
+  .brutal-btn:hover {
+    @apply -translate-x-0.5 -translate-y-0.5 shadow-brutal-hover;
+  }
+
+  .brutal-btn:active {
+    @apply translate-x-0.5 translate-y-0.5 shadow-none scale-[0.97];
+  }
+
+  .brutal-tag {
+    @apply inline-block border-2 border-border bg-bg-secondary px-3 py-1 font-body text-xs uppercase tracking-wider;
+  }
+
+  .section-label {
+    @apply font-body text-xs uppercase tracking-[0.2em] text-text-secondary;
+  }
+
+  .grid-lines {
+    background-image: linear-gradient(
+        to right,
+        rgba(10, 10, 10, 0.06) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .blink-cursor::after {
+    content: "_";
+    animation: blink 1s step-end infinite;
+    color: var(--accent-primary);
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
