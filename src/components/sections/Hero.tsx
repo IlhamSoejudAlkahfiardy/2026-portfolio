@@ -56,7 +56,7 @@ export function Hero({ personal }: HeroProps) {
     return () => ctx.revert();
   }, [reducedMotion]);
 
-  const tickerText = `FRONTEND ENGINEER ✦ OPEN TO WORK ✦ BASED IN ${personal.location.toUpperCase()} ✦ `;
+  const tickerText = `FRONTEND ENGINEER ✦ OPEN TO WORK ✦ BASED IN ${personal.location.toUpperCase()} ✦ ${personal.yearsOfExperience} YEARS OF EXPERIENCE`;
 
   return (
     <section

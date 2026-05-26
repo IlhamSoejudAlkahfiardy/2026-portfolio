@@ -14,8 +14,8 @@ export type ExperienceType =
 export interface SocialLinks {
   github: string;
   linkedin: string;
-  twitter: string;
-  dribbble: string;
+  // twitter: string;
+  // dribbble: string;
 }
 
 export interface Personal {
@@ -91,6 +91,17 @@ export interface Principle {
 
 export type PreferredContact = "email" | "linkedin";
 
+export interface ContactAboutMe {
+  description: string;
+  photoUrl: string;
+  photoAlt: string;
+}
+
+export interface ContactSocialMedia {
+  instagram: string;
+  github: string;
+}
+
 export interface Contact {
   headline: string;
   subtext: string;
@@ -98,4 +109,6 @@ export interface Contact {
   preferredContact: PreferredContact;
   availability: string;
   responseTime: string;
+  aboutMe: ContactAboutMe;
+  socialMedia: ContactSocialMedia;
 }

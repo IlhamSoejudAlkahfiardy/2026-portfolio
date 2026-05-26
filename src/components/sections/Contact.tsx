@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import Image from "next/image";
 import { gsap } from "@/lib/gsap";
 import { scrollToSection } from "@/lib/gsap";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
@@ -10,6 +11,7 @@ import type { Contact as ContactData } from "@/types";
 interface ContactProps {
   contact: ContactData;
   linkedinUrl: string;
+  name: string;
 }
 
 function MagneticButton({
@@ -65,7 +67,60 @@ function MagneticButton({
   );
 }
 
-export function Contact({ contact, linkedinUrl }: ContactProps) {
+function InstagramIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function GithubIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 18 3.77 5.07 5.07 0 0 0 17.91 1S16.73.65 12 3.1 6.27 1 6.27 1 5.09.65 4.09 3.77A5.44 5.44 0 0 0 2 9.24c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 8 19.13V22" />
+    </svg>
+  );
+}
+
+const SOCIAL_LINKS = [
+  {
+    key: "instagram",
+    label: "Instagram",
+    icon: InstagramIcon,
+    getHref: (contact: ContactData) => contact.socialMedia.instagram,
+  },
+  {
+    key: "github",
+    label: "GitHub",
+    icon: GithubIcon,
+    getHref: (contact: ContactData) => contact.socialMedia.github,
+  },
+] as const;
+
+export function Contact({ contact, linkedinUrl, name }: ContactProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
@@ -123,6 +178,17 @@ export function Contact({ contact, linkedinUrl }: ContactProps) {
         duration: 0.4,
         stagger: 0.02,
       });
+
+      gsap.from(".contact-about", {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+        },
+        opacity: 0,
+        x: 40,
+        duration: 0.6,
+        delay: 0.2,
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -137,82 +203,126 @@ export function Contact({ contact, linkedinUrl }: ContactProps) {
       className="min-h-[100svh] border-b-2 border-border bg-accent-primary px-4 py-24 md:px-8"
       aria-label="Contact"
     >
-      <div className="mx-auto flex max-w-7xl flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex-1">
-          <h2 className="font-display text-[clamp(2.5rem,8vw,6rem)] uppercase leading-[0.9] text-text-primary">
-            {headlineLetters.map((char, i) => (
-              <span
-                key={`${char}-${i}`}
-                className="contact-letter inline-block"
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex-1 lg:max-w-2xl">
+            <h2 className="font-display text-[clamp(2.5rem,8vw,6rem)] uppercase leading-[0.9] text-text-primary">
+              {headlineLetters.map((char, i) => (
+                <span
+                  key={`${char}-${i}`}
+                  className="contact-letter inline-block"
+                >
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              ))}
+            </h2>
+            <p className="mt-6 max-w-lg font-body text-sm text-text-primary/80">
+              {contact.subtext}
+            </p>
+            <p className="mt-2 font-body text-xs uppercase tracking-wider text-text-primary/60">
+              {contact.availability}
+            </p>
+
+            <div className="mt-10 flex flex-wrap gap-4">
+              <MagneticButton
+                href={`mailto:${contact.email}`}
+                className="brutal-btn bg-bg-secondary text-text-primary"
               >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
-          </h2>
-          <p className="mt-6 max-w-lg font-body text-sm text-text-primary/80">
-            {contact.subtext}
-          </p>
-          <p className="mt-2 font-body text-xs uppercase tracking-wider text-text-primary/60">
-            {contact.availability}
-          </p>
-
-          <div className="mt-10 flex flex-wrap gap-4">
-            <MagneticButton
-              href={`mailto:${contact.email}`}
-              className="brutal-btn bg-bg-secondary text-text-primary"
-            >
-              Send an Email
-            </MagneticButton>
-            <MagneticButton
-              href={linkedinUrl}
-              external
-              className="brutal-btn border-text-primary bg-text-primary text-bg-secondary"
-            >
-              Connect on LinkedIn
-            </MagneticButton>
+                Send an Email
+              </MagneticButton>
+              <MagneticButton
+                href={linkedinUrl}
+                external
+                className="brutal-btn border-text-primary bg-text-primary text-bg-secondary"
+              >
+                Connect on LinkedIn
+              </MagneticButton>
+            </div>
           </div>
+
+          <aside className="contact-about flex w-full flex-col gap-6 lg:w-[340px] xl:w-[380px]">
+            <article className="border-2 border-text-primary bg-bg-secondary shadow-brutal-lg">
+              <p className="border-b-2 border-text-primary bg-text-primary px-4 py-2 font-ui text-xs font-bold uppercase tracking-wider text-bg-secondary">
+                About Me
+              </p>
+              <div className="relative aspect-[4/5] w-full border-b-2 border-text-primary">
+                <Image
+                  src={contact.aboutMe.photoUrl}
+                  alt={contact.aboutMe.photoAlt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 380px"
+                  priority={false}
+                />
+              </div>
+              <p className="p-5 font-body text-sm leading-relaxed text-text-secondary">
+                {contact.aboutMe.description}
+              </p>
+            </article>
+
+            <div className="border-2 border-text-primary bg-bg-secondary p-6 shadow-brutal-lg">
+              <p className="section-label text-text-secondary">Contact Details</p>
+              <p className="mt-4 font-body text-sm">{contact.email}</p>
+              <p className="mt-2 font-body text-xs text-text-secondary">
+                {contact.responseTime}
+              </p>
+              <p className="mt-4 font-ui text-xs font-semibold uppercase">
+                Preferred: {contact.preferredContact}
+              </p>
+
+              <p className="mt-6 font-ui text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                Social Media
+              </p>
+              <div className="mt-3 flex flex-col gap-2">
+                {SOCIAL_LINKS.map(({ key, label, icon: SocialIcon, getHref }) => (
+                  <a
+                    key={key}
+                    href={getHref(contact)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="brutal-btn flex items-center justify-between bg-bg-primary px-4 py-3 text-sm normal-case tracking-normal hover:-rotate-1"
+                  >
+                    <span className="flex items-center gap-2 font-ui font-semibold uppercase">
+                      <SocialIcon />
+                      {label}
+                    </span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </aside>
         </div>
 
-        <div className="border-2 border-text-primary bg-bg-secondary p-8 shadow-brutal-lg lg:w-80">
-          <p className="section-label text-text-secondary">Contact Details</p>
-          <p className="mt-4 font-body text-sm">{contact.email}</p>
-          <p className="mt-2 font-body text-xs text-text-secondary">
-            {contact.responseTime}
+        <footer className="mt-20 flex flex-col items-center justify-between gap-4 border-t-2 border-text-primary pt-8 font-ui text-xs uppercase md:flex-row">
+          <p className="text-text-primary/70">
+            © {new Date().getFullYear()} {name}. All rights reserved.
           </p>
-          <p className="mt-4 font-ui text-xs font-semibold uppercase">
-            Preferred: {contact.preferredContact}
-          </p>
-        </div>
+          <div className="flex gap-6">
+            <button
+              type="button"
+              onClick={() => scrollToSection("work")}
+              className="hover:underline"
+            >
+              Work
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection("experience")}
+              className="hover:underline"
+            >
+              Experience
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection("hero")}
+              className="hover:underline"
+            >
+              Back to top ↑
+            </button>
+          </div>
+        </footer>
       </div>
-
-      <footer className="mx-auto mt-20 flex max-w-7xl flex-col items-center justify-between gap-4 border-t-2 border-text-primary pt-8 font-ui text-xs uppercase md:flex-row">
-        <p className="text-text-primary/70">
-          © {new Date().getFullYear()} Devon Price. All rights reserved.
-        </p>
-        <div className="flex gap-6">
-          <button
-            type="button"
-            onClick={() => scrollToSection("work")}
-            className="hover:underline"
-          >
-            Work
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollToSection("experience")}
-            className="hover:underline"
-          >
-            Experience
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollToSection("hero")}
-            className="hover:underline"
-          >
-            Back to top ↑
-          </button>
-        </div>
-      </footer>
     </section>
   );
 }

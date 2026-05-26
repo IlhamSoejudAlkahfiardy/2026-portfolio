@@ -54,7 +54,11 @@ export default function HomePage() {
         <PrinciplesSection principles={principles} />
         <TechStackSection skills={skills} techStack={techStack} />
         <CaseStudySection projects={projects} />
-        <ContactSection contact={contact} linkedinUrl={personal.social.linkedin} />
+        <ContactSection
+          contact={contact}
+          linkedinUrl={personal.social.linkedin}
+          name={personal.name}
+        />
       </main>
     </>
   );
