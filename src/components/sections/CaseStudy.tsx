@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { ProjectGitHubLink } from "@/components/ProjectGitHubLink";
 import { Badge } from "@/components/ui/badge";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -116,7 +117,7 @@ export function CaseStudy({ projects }: CaseStudyProps) {
                     ))}
                   </div>
 
-                  <div className="border-t-2 border-border p-6 md:p-8">
+                  {/* <div className="border-t-2 border-border p-6 md:p-8">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                       {project.caseStudy.metrics.map((metric) => (
                         <div key={metric}>
@@ -127,7 +128,7 @@ export function CaseStudy({ projects }: CaseStudyProps) {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
                 </>
               )}
 
@@ -136,12 +137,12 @@ export function CaseStudy({ projects }: CaseStudyProps) {
                   src={project.imageUrl}
                   alt={project.title}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="100vw"
                 />
               </div>
 
-              <div className="flex flex-wrap gap-6 border-t-2 border-border p-6 font-ui text-sm font-semibold uppercase md:p-8">
+              <div className="flex flex-wrap items-center gap-4 border-t-2 border-border p-6 font-ui text-sm font-semibold uppercase md:p-8">
                 {project.liveUrl && (
                   <a
                     href={project.liveUrl}
@@ -152,16 +153,7 @@ export function CaseStudy({ projects }: CaseStudyProps) {
                     Live Site ↗
                   </a>
                 )}
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline"
-                  >
-                    GitHub ↗
-                  </a>
-                )}
+                <ProjectGitHubLink github={project.github} />
               </div>
             </article>
           ))}

@@ -26,6 +26,10 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: `${personal.name} — Frontend Engineer`,
   description: personal.bio,
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   keywords: [
     "frontend developer",
     "react",
@@ -60,7 +64,7 @@ export default function RootLayout({
       lang="en"
       className={`${bebasNeue.variable} ${ibmPlexMono.variable} ${dmSans.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col overflow-x-hidden">
+      <body className="min-h-full flex flex-col overflow-x-hidden min-w-full">
         <TooltipProvider delayDuration={200}>
           <CustomCursor />
           {children}

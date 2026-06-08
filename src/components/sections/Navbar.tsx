@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,9 +59,17 @@ export function Navbar({ personal }: NavbarProps) {
           <button
             type="button"
             onClick={() => scrollToSection("hero")}
-            className="font-display text-2xl uppercase tracking-wide text-text-primary"
+            className="flex items-center"
+            aria-label={personal.name}
           >
-            {personal.name}
+            <Image
+              src="/logo.png"
+              alt={`${personal.name} logo`}
+              width={40}
+              height={40}
+              className="h-8 w-8 object-contain md:h-10 md:w-10"
+              priority
+            />
           </button>
 
           <ul className="hidden items-center gap-6 md:flex">

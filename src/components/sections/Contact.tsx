@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { Fragment, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/gsap";
 import { scrollToSection } from "@/lib/gsap";
@@ -185,7 +185,7 @@ export function Contact({ contact, linkedinUrl, name }: ContactProps) {
           start: "top 75%",
         },
         opacity: 0,
-        x: 40,
+        x: 0,
         duration: 0.6,
         delay: 0.2,
       });
@@ -194,7 +194,7 @@ export function Contact({ contact, linkedinUrl, name }: ContactProps) {
     return () => ctx.revert();
   }, [reducedMotion]);
 
-  const headlineLetters = contact.headline.split("");
+  const headlineWords = contact.headline.split(" ");
 
   return (
     <section
@@ -207,15 +207,26 @@ export function Contact({ contact, linkedinUrl, name }: ContactProps) {
         <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex-1 lg:max-w-2xl">
             <h2 className="font-display text-[clamp(2.5rem,8vw,6rem)] uppercase leading-[0.9] text-text-primary">
-              {headlineLetters.map((char, i) => (
-                <span
-                  key={`${char}-${i}`}
-                  className="contact-letter inline-block"
-                >
-                  {char === " " ? "\u00A0" : char}
-                </span>
+              {headlineWords.map((word, wordIndex) => (
+                <Fragment key={`${word}-${wordIndex}`}>
+                  <span className="inline-block whitespace-nowrap">
+                    {word.split("").map((char, charIndex) => (
+                      <span
+                        key={charIndex}
+                        className="contact-letter inline-block"
+                      >
+                        {char}
+                      </span>
+                    ))}
+                  </span>
+                  {wordIndex < headlineWords.length - 1 && (
+                    <span className="contact-letter inline-block">
+                      {"\u00A0"}
+                    </span>
+                  )}
+                </Fragment>
               ))}
-            </h2>
+            </h2> 
             <p className="mt-6 max-w-lg font-body text-sm text-text-primary/80">
               {contact.subtext}
             </p>

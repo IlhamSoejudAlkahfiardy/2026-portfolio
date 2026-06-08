@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
+import { ProjectGallery } from "@/components/ProjectGallery";
+import { ProjectGitHubLink } from "@/components/ProjectGitHubLink";
 import { Badge } from "@/components/ui/badge";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -45,7 +46,7 @@ export function SelectedProjects({ projects }: SelectedProjectsProps) {
           trigger: sectionRef.current,
           start: "top 75%",
         },
-        x: (index: number) => (index % 2 === 0 ? -80 : 80),
+        x: (index: number) => (index % 2 === 0 ? -0 : 0),
         opacity: 0,
         duration: 0.7,
         stagger: 0.15,
@@ -96,11 +97,10 @@ export function SelectedProjects({ projects }: SelectedProjectsProps) {
               key={category.value}
               type="button"
               onClick={() => handleCategoryChange(category.value)}
-              className={`brutal-tag transition-colors ${
-                activeCategory === category.value
-                  ? "bg-accent-secondary text-bg-secondary"
-                  : "hover:bg-bg-secondary"
-              }`}
+              className={`brutal-tag transition-colors ${activeCategory === category.value
+                ? "bg-accent-secondary text-bg-secondary"
+                : "hover:bg-bg-secondary"
+                }`}
             >
               {category.label}
             </button>
@@ -120,47 +120,42 @@ export function SelectedProjects({ projects }: SelectedProjectsProps) {
                 className="h-1 w-full"
                 style={{ backgroundColor: project.accentColor }}
               />
-              <div className="p-6">
-                <div className="mb-4 flex items-center justify-between font-body text-xs uppercase tracking-wider text-text-secondary">
-                  <span>
-                    {String(index + 1).padStart(2, "0")} / {project.year}
-                  </span>
-                  <span>{project.category.replace("-", " ")}</span>
-                </div>
-
-                <div className="relative mb-4 aspect-video overflow-hidden border-2 border-border">
-                  <Image
-                    src={project.imageUrl}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                </div>
-
-                <h3 className="font-display text-4xl uppercase leading-none">
-                  {project.title}
-                </h3>
-                <p className="mt-2 font-body text-sm text-text-secondary">
-                  {project.tagline}
-                </p>
-
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="brutal-tag text-[10px]">
-                      {tag}
+              <div className="p-6 flex flex-col h-full justify-between">
+                <div className="flex flex-col gap-4">
+                  <div className=" flex items-center justify-between font-body text-xs uppercase tracking-wider text-text-secondary">
+                    <span>
+                      {String(index + 1).padStart(2, "0")} / {project.year}
                     </span>
-                  ))}
+                    <span>{project.category.replace("-", " ")}</span>
+                  </div>
+
+                  <ProjectGallery project={project} />
+
+                  <h3 className="font-display text-4xl uppercase leading-none">
+                    {project.title}
+                  </h3>
+                  <p className=" font-body text-sm text-text-secondary">
+                    {project.tagline}
+                  </p>
+
+                  <div className=" flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="brutal-tag text-[10px]">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <p className=" font-body text-sm leading-relaxed text-text-secondary">
+                    {project.description}
+                  </p>
                 </div>
 
-                <p className="mt-4 font-body text-sm leading-relaxed text-text-secondary">
-                  {project.description}
-                </p>
-
-                <div className="mt-6 flex flex-wrap gap-4 font-ui text-sm font-semibold uppercase">
+                {/* button */}
+                <div className="mt-6 flex flex-wrap items-center gap-3 font-ui text-sm font-semibold uppercase">
                   {project.caseStudy && (
                     <a
-                      href={`#case-study`}
+                      href="#case-study"
                       className="underline-offset-4 hover:underline"
                     >
                       Case Study →
@@ -176,16 +171,7 @@ export function SelectedProjects({ projects }: SelectedProjectsProps) {
                       Live ↗
                     </a>
                   )}
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline-offset-4 hover:underline"
-                    >
-                      GitHub ↗
-                    </a>
-                  )}
+                  <ProjectGitHubLink github={project.github} />
                 </div>
               </div>
             </article>

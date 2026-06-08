@@ -37,6 +37,17 @@ export interface CaseStudy {
   metrics: string[];
 }
 
+export interface ProjectImage {
+  url: string;
+  alt: string;
+}
+
+/** public = link aktif · internal = repo ada tapi tidak dibagikan · none = tidak ada repo */
+export type ProjectGitHub =
+  | { access: "public"; url: string }
+  | { access: "internal"; reason?: string }
+  | { access: "none"; reason?: string };
+
 export interface Project {
   id: string;
   title: string;
@@ -46,8 +57,9 @@ export interface Project {
   category: ProjectCategory;
   tags: string[];
   imageUrl: string;
+  additionalImages?: ProjectImage[];
   liveUrl?: string;
-  githubUrl?: string;
+  github: ProjectGitHub;
   featured: boolean;
   accentColor: string;
   caseStudy?: CaseStudy;
